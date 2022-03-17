@@ -40,12 +40,12 @@ class Product4(db.Model):
 # print(query.temperature)
 # print(query.humidity)
 
-@app.route('/add')
+@app.route('/add',methods=["POST","GET"])
 def add():
     sql = """
     INSERT INTO product4(
     temp, humi,time)
-    VALUES ('20', '90','03/17 14:39:24')
+    VALUES ('%s', '%s','%s')
 """
 
     db.engine.execute(sql)
