@@ -5,6 +5,9 @@ from datetime import datetime
 
 from sqlalchemy import false
 
+import paho.mqtt.client as mqtt
+import threading
+import mysql.connector
 
 
 app = Flask(__name__)
@@ -79,5 +82,34 @@ def index():
 #list(a.id())
     return "ok"
 
+
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+    client.subscribe("test")
+
+mysqlConnection = None    
+def on_message(client, userdata, msg):
+    decodedMessage = str(msg.payload.decode("utf-8"))
+    content = json.loads(decodedMessage)
+    global mysqlConnection
+    cursor = mysqlConnection.cursor()
+    cursor.execute('insert into <table name> (<fields>)\
+        values (<values>)')
+
+
+def mqttHandlerAndMysql():
+    global mysqlConnection
+    mysqlConnection = mysql.connector.connect(host='192.168.168.112',
+                                         database='<db>',
+                                         user='<user>',
+                                         password='<password>')
+        
+    client = mqtt.Client()
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.connect("192.168.168.112", 1883, 60)
+    client.loop_forever()
+
 if __name__ == "__main__":
+    threading.Thread(target=mqttHandlerAndMysql).start()
     app.run(debug=True)
