@@ -7,8 +7,7 @@ import Adafruit_DHT
  
 ISOTIMEFORMAT = '%m/%d %H:%M:%S'
 client = mqtt.Client()
-client.username_pw_set("jeams03","0303zz")
-client.connect('192.168.168.112', 1883)
+client.connect('192.168.168.112', 1883, 60)
  
 GPIO_PIN = 4
  
@@ -24,7 +23,7 @@ try:
         if humidity is not None and temperature is not None:
             # print('temp=%.1f*C, humidity=%.1f%%'%(temperature, humidity))
             print(mqttPayload)
-            # client.publish("test", json.dumps(mqttPayload))
+            client.publish("test", json.dumps(mqttPayload))
         else:
             print('read error')
         time.sleep(0.05)
