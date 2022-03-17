@@ -1,2 +1,5 @@
 flask
 PyMySQL
+thread6
+paho-mqtt
+mysql-connector-python
