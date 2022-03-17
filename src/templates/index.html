@@ -50,7 +50,7 @@
         溫度<span style="color: #537dd1; font-size: 25px"> 00°C</span>
       </button></a>
     <a><button type="button" class="button" value="humi">
-        溼度<span style="color: #cc2864; font-size: 25px"> 00%</span>
+        溼度<span style="color: #cc2864; font-size: 25px"></span>
       </button></a>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
@@ -58,10 +58,29 @@
     <canvas class="myChart" id="myChart"></canvas>
   </div>
   <script>
+
     function render(data) {
-      let time = data.time;
-      let temp = data.temp;
-      let humi = data.humi;
+      
+
+      let time = [];
+      let temp = [];
+      let humi = [];
+
+      for(let i in data) {
+        time.push(data[i].time)
+        temp.push(data[i].temp)
+        humi.push(data[i].humi)
+        if(i == data.length-1) {
+          
+        }
+      }
+      const getlasttime = (data)=> {
+        let lasttime = data[data.length-1].temp;
+        console.log({lasttime})
+      }
+      console.log(getlasttime(data))
+      
+
 
       var ctx = document.getElementById("myChart").getContext("2d");
       var myChart = new Chart(ctx, {
@@ -89,10 +108,11 @@
 
     fetch('http://192.168.168.112:5000/list')
       .then(response => {
-        return response.json()
+        return response.json();
       })
       .then(data => {
         render(data)
+        console.log(data)
       })
   </script>
 </body>
