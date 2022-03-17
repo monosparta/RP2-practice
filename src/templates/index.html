@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Refresh" content="60" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>System</title>
+  <style>
+    h2,
+    h1 {
+      line-height: 1%;
+    }
+
+    body {
+      background: rgb(253, 253, 253);
+    }
+
+    .button {
+      width: 100px;
+      height: 100px;
+      text-align: center;
+      color: darkcyan;
+      margin: 50px 40px 50px;
+      border: 6px solid rgb(97, 150, 172);
+      background: rgb(253, 253, 253);
+      font-size: 20px;
+      border-radius: 50%;
+    }
+
+    .myChart {
+      max-width: 900px;
+      max-height: 900px;
+    }
+
+    div {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+
+
+
+<body>
+  <div>
+    <a><button type="button" class="button" value="temp">
+        溫度<span style="color: #537dd1; font-size: 25px"> 00°C</span>
+      </button></a>
+    <a><button type="button" class="button" value="humi">
+        溼度<span style="color: #cc2864; font-size: 25px"> 00%</span>
+      </button></a>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+  <div>
+    <canvas class="myChart" id="myChart"></canvas>
+  </div>
+  <script>
+    function render(data) {
+      let time = data.time;
+      let temp = data.temp;
+      let humi = data.humi;
+
+      var ctx = document.getElementById("myChart").getContext("2d");
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: time,
+          datasets: [
+            {
+              label: "現在溫度",
+              data: temp,
+              fill: false,
+              borderColor: "rgb(83, 125, 209)",
+            },
+            {
+              label: "現在濕度",
+              data: humi,
+              fill: false,
+              borderColor: "rgb(204, 40, 100)",
+            },
+          ],
+        },
+      });
+
+    }
+
+    fetch('http://192.168.168.112:5000/list')
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        render(data)
+      })
+  </script>
+</body>
+</head>
+
+</html>
