@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Refresh" content="60" />
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -19,10 +18,10 @@
     }
 
     .button {
-      width: 100px;
-      height: 100px;
+      width: 130px;
+      height: 130px;
       text-align: center;
-      color: rgb(247, 15, 142);
+      color: rgb(97, 150, 172);
       margin: 50px 40px 50px;
       border: 6px solid rgb(97, 150, 172);
       background: rgb(253, 253, 253);
@@ -47,7 +46,7 @@
 <body>
   <div>
     <a><button type="button" class="button" value="temp" id="temp">
-        <span style="color: #537dd1; font-size: 25px" ></span>
+        <span style="color: #537dd1; font-size: 25px"></span>
       </button></a>
     <a><button type="button" class="button" value="humi" id="humi">
         <span style="color: #cc2864; font-size: 25px"></span>
@@ -60,25 +59,19 @@
   <script>
 
     function render(data) {
-      
-
       let time = [];
       let temp = [];
       let humi = [];
 
-      for(let i in data) {
+      for (let i in data) {
         time.push(data[i].time)
         temp.push(data[i].temp)
         humi.push(data[i].humi)
-        if(i == data.length-1) {
-          document.getElementById("temp").innerHTML ="溫度" + data[i].temp+"°C";
-          document.getElementById("humi").innerHTML ="濕度" + data[i].humi+"%";
-
+        if (i == data.length - 1) {
+          document.getElementById("temp").innerHTML = "現在溫度" + data[i].temp + "°C";
+          document.getElementById("humi").innerHTML = "現在濕度" + data[i].humi + "%";
         }
       }
-
-      
-
 
       var ctx = document.getElementById("myChart").getContext("2d");
       var myChart = new Chart(ctx, {
@@ -87,31 +80,38 @@
           labels: time,
           datasets: [
             {
-              label: "現在溫度",
+              label: "溫度",
               data: temp,
               fill: false,
               borderColor: "rgb(83, 125, 209)",
             },
             {
-              label: "現在濕度",
+              label: "濕度",
               data: humi,
               fill: false,
               borderColor: "rgb(204, 40, 100)",
             },
           ],
         },
+        options: {
+          animation: {
+            duration: 0
+          }
+        }
       });
-
     }
 
-    fetch('http://192.168.168.112:5000/list')
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        render(data)
-        console.log(data)
-      })
+
+    var intervalId = window.setInterval(() => {
+      fetch('http://192.168.168.112:5000/list')
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          render(data)
+          console.log(data)
+        });
+    }, 1000);
   </script>
 </body>
 </head>
