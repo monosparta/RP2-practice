@@ -7,7 +7,6 @@ from datetime import datetime
 from sqlalchemy import false
 
 import paho.mqtt.client as mqtt
-import threading
 from multiprocessing import Process
 import mysql.connector
 
