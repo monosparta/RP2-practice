@@ -50,7 +50,7 @@ def index1():
 @app.route('/list')
 def list():
     sql = """
-    select * from (select * from dh11 order by id desc limit 10) as preProcess order by id;
+    select * from (select * from dh11 order by id desc limit 25) as preProcess GROUP BY time order by id LIMIT 10;
     """
     # print(db.engine.execute(sql).fetchall())
     a = db.engine.execute(sql).fetchall()
@@ -72,12 +72,15 @@ def on_connect(client, userdata, flags, rc):
 
 mysqlConnection = None    
 def on_message(client, userdata, msg):
-    print('trigger on message')
     decodedMessage = str(msg.payload.decode("utf-8"))
     content = json.loads(decodedMessage)
     print(content['temperature'], content['humidity'], content['time'])
     global mysqlConnection
     cursor = mysqlConnection.cursor()
+    # cursor.execute('select * from DH11 order by id desc limit 1')
+    # lastRecord = cursor.fetchall()
+    # print('last record', lastRecord[0][3])
+
     queryString = 'insert into `DH11` (`temp`,`humi`,`time`) \
         values ("%s", "%s", "%s");'%(str(content['temperature']), str(content['humidity']), str(content['time']))
     # print(queryString)
