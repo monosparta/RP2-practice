@@ -39,17 +39,19 @@
       display: flex;
       justify-content: center;
     }
+
   </style>
 
-
-
 <body>
+  
   <div>
     <a><button type="button" class="button" value="temp" id="temp">
-        <span style="color: #537dd1; font-size: 25px"></span>
+
+
+        <span style="font-size: 25px"></span>
       </button></a>
     <a><button type="button" class="button" value="humi" id="humi">
-        <span style="color: #cc2864; font-size: 25px"></span>
+        <span style="font-size: 25px"></span>
       </button></a>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
@@ -68,8 +70,15 @@
         temp.push(data[i].temp)
         humi.push(data[i].humi)
         if (i == data.length - 1) {
-          document.getElementById("temp").innerHTML = "現在溫度" + data[i].temp + "°C";
-          document.getElementById("humi").innerHTML = "現在濕度" + data[i].humi + "%";
+          document.getElementById("temp").innerHTML = "現在溫度🌤" + data[i].temp + "°C";
+          document.getElementById("humi").innerHTML = "現在濕度🌨" + data[i].humi + "%";
+        }
+
+        if (data[i].temp >= 28) {
+          document.getElementById("temp").style.color = "red";
+        }
+        else {
+          document.getElementById("temp").style.color = "rgb(97, 150, 172)";
         }
       }
 
@@ -84,12 +93,14 @@
               data: temp,
               fill: false,
               borderColor: "rgb(83, 125, 209)",
+              backgroundColor: "rgb(83, 125, 209)",
             },
             {
               label: "濕度",
               data: humi,
               fill: false,
               borderColor: "rgb(204, 40, 100)",
+              backgroundColor: "rgb(204, 40, 100)",
             },
           ],
         },
