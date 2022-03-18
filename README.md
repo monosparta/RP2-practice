@@ -44,6 +44,7 @@ import mysql.connector
 ```
 ## 使用設備
 Raspberry Pi 2
+
 DHT11
 
 
