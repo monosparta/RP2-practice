@@ -47,4 +47,10 @@ Raspberry Pi 2
 
 DHT11
 
+I2C 1602
 
+
+## 執行腳本
+1. 利用user1(:user1)身分ssh登入樹梅派後切換使用者為pi(:raspberry)
+2. 進入user1中執行rpi2.py，即可成功
+3. :warning: 若有任何error則尋求google協助
