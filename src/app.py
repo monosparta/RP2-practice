@@ -1,14 +1,25 @@
+from cgitb import text
+import json
+from re import S
 from time import sleep
 from urllib import response
 from flask import Flask, render_template, request, jsonify,json,url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import json, time, datetime
+import pysolr
+import pandas as pd
 
 from sqlalchemy import false
 
 import paho.mqtt.client as mqtt
 from multiprocessing import Process
 import mysql.connector
+
+
+ISOTIMEFORMAT = '%m/%d %H:%M:%S'
+client = mqtt.Client()
+client.connect('192.168.168.112', 1883, 60)
 
 
 app = Flask(__name__)
@@ -47,6 +58,13 @@ def index1():
     b = json.dumps([dict(r) for r in a])
     return render_template('index.html',data = b)
 
+@app.route('/test',methods=['POST','GET'])
+def test():
+    return "ok"
+
+def process_json(data):
+	return data
+
 @app.route('/list')
 def list():
     sql = """
@@ -64,17 +82,27 @@ def index():
     
 #list(a.id())
     return "ok"
-
-
-def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
-    client.subscribe("test")
+@app.route('/i2cpb',methods=['POST'])
+def i2cpb1():
+    content_type = request.headers.get('Content-Type')
+    if content_type == 'application/json':
+        json = request.json
+        mqttPayload = {
+            'message': json                
+        }
+        
+        global client
+        client.publish("i2c", json.dumps(mqttPayload))
+        
+    else:
+        print("fail") 
+    
 
 mysqlConnection = None    
 def on_message(client, userdata, msg):
     decodedMessage = str(msg.payload.decode("utf-8"))
     content = json.loads(decodedMessage)
-    print(content['temperature'], content['humidity'], content['time'])
+    # print(content['temperature'], content['humidity'], content['time'])
     global mysqlConnection
     cursor = mysqlConnection.cursor()
     # cursor.execute('select * from DH11 order by id desc limit 1')
@@ -95,10 +123,9 @@ def mqttHandlerAndMysql():
                                          user='root',
                                          password='')
         
-    client = mqtt.Client()
-    client.on_connect = on_connect
+    global client
+    client.subscribe("dh11")
     client.on_message = on_message
-    client.connect("127.0.0.1", 1883, 60)
     client.loop_forever()
 
 if __name__ == "__main__":

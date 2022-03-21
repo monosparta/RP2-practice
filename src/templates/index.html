@@ -1,130 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>System</title>
-  <style>
-    h2,
-    h1 {
-      line-height: 1%;
-    }
-
-    body {
-      background: rgb(253, 253, 253);
-    }
-
-    .button {
-      width: 130px;
-      height: 130px;
-      text-align: center;
-      color: rgb(97, 150, 172);
-      margin: 50px 40px 50px;
-      border: 6px solid rgb(97, 150, 172);
-      background: rgb(253, 253, 253);
-      font-size: 20px;
-      border-radius: 50%;
-    }
-
-    .myChart {
-      max-width: 900px;
-      max-height: 900px;
-    }
-
-    div {
-      align-items: center;
-      display: flex;
-      justify-content: center;
-    }
-
-  </style>
-
-<body>
-  
-  <div>
-    <a><button type="button" class="button" value="temp" id="temp">
-
-
-        <span style="font-size: 25px"></span>
-      </button></a>
-    <a><button type="button" class="button" value="humi" id="humi">
-        <span style="font-size: 25px"></span>
-      </button></a>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-  <div>
-    <canvas class="myChart" id="myChart"></canvas>
-  </div>
-  <script>
-
-    function render(data) {
-      let time = [];
-      let temp = [];
-      let humi = [];
-
-      for (let i in data) {
-        time.push(data[i].time)
-        temp.push(data[i].temp)
-        humi.push(data[i].humi)
-        if (i == data.length - 1) {
-          document.getElementById("temp").innerHTML = "現在溫度🌤" + data[i].temp + "°C";
-          document.getElementById("humi").innerHTML = "現在濕度🌨" + data[i].humi + "%";
-        }
-
-        if (data[i].temp >= 28) {
-          document.getElementById("temp").style.color = "red";
-        }
-        else {
-          document.getElementById("temp").style.color = "rgb(97, 150, 172)";
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>System</title>
+    <style>
+      h2,
+      h1 {
+        line-height: 1%;
       }
 
-      var ctx = document.getElementById("myChart").getContext("2d");
-      var myChart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: time,
-          datasets: [
-            {
-              label: "溫度",
-              data: temp,
-              fill: false,
-              borderColor: "rgb(83, 125, 209)",
-              backgroundColor: "rgb(83, 125, 209)",
-            },
-            {
-              label: "濕度",
-              data: humi,
-              fill: false,
-              borderColor: "rgb(204, 40, 100)",
-              backgroundColor: "rgb(204, 40, 100)",
-            },
-          ],
-        },
-        options: {
-          animation: {
-            duration: 0
+      body {
+        background: rgb(253, 253, 253);
+      }
+
+      .button {
+        width: 130px;
+        height: 130px;
+        text-align: center;
+        color: rgb(97, 150, 172);
+        margin: 50px 40px 50px;
+        border: 6px solid rgb(97, 150, 172);
+        background: rgb(253, 253, 253);
+        font-size: 20px;
+        border-radius: 50%;
+      }
+
+      .myChart {
+        max-width: 700px;
+        max-height: 700px;
+      }
+
+      div {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+      }
+    </style>
+
+    <body>
+      <div>
+        <a
+          ><button type="button" class="button" value="temp" id="temp">
+            <span style="font-size: 25px"></span></button
+        ></a>
+        <a
+          ><button type="button" class="button" value="humi" id="humi">
+            <span style="font-size: 25px"></span></button
+        ></a>  
+      </div>
+      <div>
+        <form method="POST">
+          輸入文字:<input type="text" id="text" name="text"/>
+          <input id="hiddenText" type="text" style="display:none" />
+        </form>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+      <div>
+        <canvas class="myChart" id="myChart"></canvas>
+        <canvas class="myChart" id="Chart"></canvas>
+      </div>
+      <script>
+
+        
+        
+        function render(data) {
+          let time = [];
+          let temp = [];
+          let humi = [];
+
+          for (let i in data) {
+            time.push(data[i].time);
+            temp.push(data[i].temp);
+            humi.push(data[i].humi);
+            if (i == data.length - 1) {
+              document.getElementById("temp").innerHTML =
+                "現在溫度🌤" + data[i].temp + "°C";
+              document.getElementById("humi").innerHTML =
+                "現在濕度🌨" + data[i].humi + "%";
+            }
+
+            if (data[i].temp >= 28) {
+              document.getElementById("temp").style.color = "red";
+            } else {
+              document.getElementById("temp").style.color = "rgb(97, 150, 172)";
+            }
           }
+
+          var ctx = document.getElementById("myChart").getContext("2d");
+          var myChart = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: time,
+              datasets: [
+                {
+                  label: "溫度",
+                  data: temp,
+                  fill: false,
+                  borderColor: "rgb(83, 125, 209)",
+                  backgroundColor: "rgb(83, 125, 209)",
+                },
+              ],
+            },
+            options: {
+              animation: {
+                duration: 0,
+              },
+            },
+          });
+          var ctx = document.getElementById("Chart").getContext("2d");
+          var myChart = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: time,
+              datasets: [
+                {
+                  label: "濕度",
+                  data: humi,
+                  fill: false,
+                  borderColor: "rgb(204, 40, 100)",
+                  backgroundColor: "rgb(204, 40, 100)",
+                },
+              ],
+            },
+            options: {
+              animation: {
+                duration: 0,
+              },
+            },
+          });
         }
-      });
-    }
 
+        var intervalId = window.setInterval(() => {
+          fetch("http://192.168.168.112:5000/list")
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              render(data);
+              console.log(data);
+            });
+        }, 1000);
 
-    var intervalId = window.setInterval(() => {
-      fetch('http://192.168.168.112:5000/list')
-        .then(response => {
-          return response.json();
-        })
-        .then(data => {
-          render(data)
-          console.log(data)
-        });
-    }, 1000);
-  </script>
-</body>
-</head>
+        document.getElementById("text").addEventListener('keydown', function(e){
+          // enter 的 keyCode 是 13
+          if( e.keyCode === 13 ){
+            var text = {text: document.getElementById("text").value};
 
+            fetch("http://192.168.168.112:5000/i2cpb", {
+              method: 'POST', // or 'PUT'
+              body: JSON.stringify(text), // data can be `string` or {object}!
+              headers: new Headers({
+                'Content-Type': 'application/json'
+              })
+            }).then(res => res.json())
+            .catch(error => console.log('Error:', error))
+            .then(response => console.log('Success:', response));
+            
+          }
+        }, false);
+
+      </script>
+    </body>
+  </head>
 </html>
