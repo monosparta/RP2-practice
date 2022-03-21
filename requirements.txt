@@ -1,5 +1,6 @@
 flask
 PyMySQL
 thread6
-paho-mqtt
 mysql-connector-python
+smbus
+paho-mqtt
