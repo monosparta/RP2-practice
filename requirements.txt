@@ -2,5 +2,7 @@ flask
 PyMySQL
 thread6
 mysql-connector-python
+Adafruit-DHT
 smbus
 paho-mqtt
+multiprocess
