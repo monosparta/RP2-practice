@@ -6,7 +6,7 @@ import Adafruit_DHT
 import LCD1602
 from multiprocessing import Process
 import time
-
+# test
 ISOTIMEFORMAT = '%m/%d %H:%M:%S'
 client = mqtt.Client()
 client.connect('192.168.168.112', 1883, 60)
